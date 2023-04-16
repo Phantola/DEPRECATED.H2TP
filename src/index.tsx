@@ -1,4 +1,4 @@
-import { Form, ActionPanel, Action, showToast, Detail, Toast } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, Toast } from "@raycast/api";
 import axios, { AxiosError } from "axios";
 
 import { useState } from "react";
@@ -39,7 +39,7 @@ export default function Command() {
     const { httpHeaderContent, httpBodyContent, httpRequestUrl, httpMethod } = values;
 
     // URL parsing
-    let url: string = "";
+    let url = "";
 
     // URL validation
     if (httpRequestUrl.trim().length > 0) {
@@ -137,7 +137,7 @@ export default function Command() {
         title="Request URL"
         error={useUrlError}
         placeholder={urlPlaceHolder}
-        onChange={(e) => {
+        onChange={() => {
           setUrlError(undefined);
           setResponseError(undefined);
         }}
@@ -157,7 +157,7 @@ export default function Command() {
         error={useHeaderError}
         storeValue
         placeholder={httpHeaderContentPlaceHolder}
-        onChange={(e) => {
+        onChange={() => {
           setHeaderError(undefined);
           setResponseError(undefined);
         }}
@@ -169,7 +169,7 @@ export default function Command() {
         error={useBodyError}
         storeValue
         placeholder={httpBodyContentPlaceHolder}
-        onChange={(e) => {
+        onChange={() => {
           setBodyError(undefined);
           setResponseError(undefined);
         }}
@@ -181,7 +181,7 @@ export default function Command() {
         title="Http Request Response"
         value={isEmptyObject(useResponse) ? "" : JSON.stringify(useResponse)}
         placeholder="Do not input anything here."
-        onChange={(event) => {
+        onChange={() => {
           setResponse("");
         }}
       />
