@@ -1,7 +1,7 @@
 import { Form, ActionPanel, Action, showToast, Detail, Toast } from "@raycast/api";
 import axios, { AxiosError } from "axios";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const enum HTTP_METHOD {
   GET = "GET",
@@ -17,30 +17,34 @@ type HttpRequest = {
   httpMethod: HTTP_METHOD;
 };
 
-function isEmptyObject(obj: object) {
+function isEmptyObject(obj: object): boolean {
   return Object.keys(obj).length === 0;
 }
 
 export default function Command() {
+  // React states
   const [useResponse, setResponse] = useState({});
-
   const [useUrlError, setUrlError] = useState<string | undefined>();
   const [useHeaderError, setHeaderError] = useState<string | undefined>();
   const [useBodyError, setBodyError] = useState<string | undefined>();
   const [useResponseError, setResponseError] = useState<string | undefined>();
 
+  // Input placeholders
   const urlPlaceHolder = `https://example.com/`;
   const httpHeaderContentPlaceHolder = `{"Content-Type": "application/json", ...}`;
   const httpBodyContentPlaceHolder = `{"name": "John Doe", "age": 30, "job" : "programmer" ...}`;
 
+  // Form submit handler
   async function handleSubmit(values: HttpRequest) {
     const { httpHeaderContent, httpBodyContent, httpRequestUrl, httpMethod } = values;
 
     // URL parsing
-    let url = "";
+    let url: string = "";
+
+    // URL validation
     if (httpRequestUrl.trim().length > 0) {
       try {
-        const parsedUrl = new URL(httpRequestUrl);
+        const parsedUrl: URL = new URL(httpRequestUrl);
         if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
           setUrlError("Invalid URL");
           return;
@@ -61,6 +65,8 @@ export default function Command() {
     let headers: object = {
       "Content-Type": "application/json",
     };
+
+    // Header object validation
     try {
       if (httpHeaderContent.trim().length > 0) {
         const parsedHeader = JSON.parse(httpHeaderContent);
@@ -73,8 +79,10 @@ export default function Command() {
       return;
     }
 
-    // Body parsing
+    // Data(Body) parsing
     let data: object = {};
+
+    // Data(Body) object validation
     try {
       if (httpBodyContent.trim().length > 0) {
         const parsedData = JSON.parse(httpBodyContent);
